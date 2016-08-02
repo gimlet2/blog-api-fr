@@ -35,5 +35,12 @@
     <changeSet id="3" author="andrei">
         <createSequence sequenceName="hibernate_sequence" startValue="1" incrementBy="1" cycle="false"/>
     </changeSet>
+    <changeSet id="4" author="andrei">
+        <addColumn tableName="blog_post">
+            <column name="owner" type="int">
+                <constraints foreignKeyName="blog_post_owner" referencedTableName="user" referencedColumnNames="_id"/>
+            </column>
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog>

@@ -1,13 +1,17 @@
 package de.flightright;
 
 import de.flightright.entities.BlogPost;
+import de.flightright.entities.User;
 import de.flightright.repositories.BlogPostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -25,7 +29,7 @@ public class BlogPostController {
         this.blogPostRepository = blogPostRepository;
     }
 
-    @RequestMapping(value = "/blog_post")
+    @RequestMapping(value = "/blog_post", method = RequestMethod.GET)
     public HttpEntity<List<BlogPost>> getBlogPosts() {
         List<BlogPost> blogPosts = blogPostRepository.findAll();
         blogPosts.forEach(blogPost -> blogPost.add(linkTo(methodOn(BlogPostController.class).getBlogPostById(blogPost.getAId())).withSelfRel()));
@@ -38,4 +42,11 @@ public class BlogPostController {
         blogPost.add(linkTo(methodOn(BlogPostController.class).getBlogPostById(id)).withSelfRel());
         return new ResponseEntity<>(blogPost, HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/blog_post", method = RequestMethod.POST, consumes = "application/json")
+    public HttpEntity<BlogPost> createBlogPosts(@RequestBody BlogPost blogPost, @AuthenticationPrincipal final User user) {
+        blogPost.setOwner(user);
+        return new ResponseEntity<>(blogPostRepository.save(blogPost), HttpStatus.CREATED);
+    }
+
 }

@@ -25,7 +25,7 @@ public class UserController {
     public HttpEntity<User> signUp(@RequestBody User user) {
         UserDetails userDetails = userService.loadUserByUsername(user.getUsername());
         if (userDetails == null) {
-            return new ResponseEntity<>(userService.saveUser(user), HttpStatus.OK);
+            return new ResponseEntity<>(userService.saveUser(user), HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
