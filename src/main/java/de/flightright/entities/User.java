@@ -1,5 +1,8 @@
 package de.flightright.entities;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -7,18 +10,30 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Collection;
 
 @Entity
+@Table(name = "\"user\"")
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer _id;
 
     private String username;
 
-    private String passwordHash;
+    private String password = "";
+
+    public User() {
+    }
+
+    @JsonCreator
+    public User(@JsonProperty(value = "id") Integer _id, @JsonProperty("username") String username, @JsonProperty("password") String password) {
+        this._id = _id;
+        this.username = username;
+        this.password = password;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -27,12 +42,16 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return "";
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return username;
     }
 
     @Override
@@ -55,11 +74,8 @@ public class User implements UserDetails {
         return true;
     }
 
+    @JsonGetter(value = "id")
     public Integer getAid() {
         return _id;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
     }
 }
