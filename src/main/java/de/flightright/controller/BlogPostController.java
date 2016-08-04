@@ -1,4 +1,4 @@
-package de.flightright;
+package de.flightright.controller;
 
 import de.flightright.entities.BlogPost;
 import de.flightright.entities.Comment;

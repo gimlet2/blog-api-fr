@@ -1,4 +1,4 @@
-package de.flightright;
+package de.flightright.security;
 
 import de.flightright.entities.User;
 import de.flightright.repositories.UserRepository;
