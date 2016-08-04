@@ -42,5 +42,22 @@
             </column>
         </addColumn>
     </changeSet>
-
+    <changeSet id="5" author="andrei">
+        <createTable tableName="comment">
+            <column name="_id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="content" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_date" type="DATETIME"/>
+            <column name="author" type="int">
+                <constraints foreignKeyName="comment_author" referencedTableName="user" referencedColumnNames="_id"/>
+            </column>
+            <column name="blog_post_id" type="int">
+                <constraints nullable="false" foreignKeyName="comment_blog_post" referencedTableName="blog_post"
+                             referencedColumnNames="_id"/>
+            </column>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
