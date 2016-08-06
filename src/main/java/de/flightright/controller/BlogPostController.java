@@ -61,10 +61,14 @@ public class BlogPostController {
     }
 
     @RequestMapping(value = "/blog_post/{id}/comment", method = RequestMethod.GET)
-    public HttpEntity<List<Comment>> getBlogPostComments(@PathVariable("id") Integer id) {
+    public HttpEntity<List<Comment>> getBlogPostComments(@PathVariable("id") Integer id, @AuthenticationPrincipal final User user) {
         BlogPost blogPost = getBlogPost(id);
+        List<Comment> comments = commentRepository.findByBlogPost(blogPost);
+        if (user != null && blogPost.getOwner().getAid().equals(user.getAid())) {
+            comments.forEach(c -> c.add(linkTo(methodOn(BlogPostController.class).deleteComment(c.getBlogPostId(), c.getAid(), null)).withRel("delete")));
+        }
         return new ResponseEntity<>(
-                commentRepository.findByBlogPost(blogPost),
+                comments,
                 HttpStatus.OK);
     }
 
@@ -77,7 +81,7 @@ public class BlogPostController {
     }
 
     @RequestMapping(value = "/blog_post/{id}/comment/{comment_id}", method = RequestMethod.DELETE)
-    public HttpEntity<Void> createComment(@PathVariable("id") Integer id, @PathVariable("comment_id") Integer commentId, @AuthenticationPrincipal final User user) {
+    public HttpEntity<Void> deleteComment(@PathVariable("id") Integer id, @PathVariable("comment_id") Integer commentId, @AuthenticationPrincipal final User user) {
         BlogPost blogPost = getBlogPost(id);
         if (blogPost.getOwner().getAid().equals(user.getAid())) {
             if (!commentRepository.exists(id)) {
