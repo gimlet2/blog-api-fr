@@ -60,4 +60,25 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="6" author="andrei">
+        <createTable tableName="upload_file">
+            <column name="_id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="data" type="BYTEA">
+                <constraints nullable="false"/>
+            </column>
+            <column name="blog_post_id" type="int">
+                <constraints nullable="false" foreignKeyName="file_blog_post" referencedTableName="blog_post"
+                             referencedColumnNames="_id"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="7" author="andrei">
+        <addColumn tableName="upload_file">
+            <column name="file_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
