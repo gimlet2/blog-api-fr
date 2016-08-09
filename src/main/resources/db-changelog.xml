@@ -81,4 +81,9 @@
             </column>
         </addColumn>
     </changeSet>
+    <changeSet id="8" author="andrei">
+        <addColumn tableName="blog_post">
+            <column name="creation_date" type="DATETIME" valueDate="NOW()"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

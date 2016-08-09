@@ -53,11 +53,18 @@ public class BlogPostController {
         return new ResponseEntity<>(blogPosts, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/blog_post", method = RequestMethod.POST, consumes = "application/json")
+    public HttpEntity<BlogPost> createBlogPosts(@RequestBody BlogPost blogPost, @AuthenticationPrincipal final User user) {
+        blogPost.setOwner(user);
+        return new ResponseEntity<>(blogPostRepository.save(blogPost), HttpStatus.CREATED);
+    }
+
     @RequestMapping(value = "/blog_post/{id}")
     public HttpEntity<BlogPost> getBlogPostById(@PathVariable("id") Integer id) {
         BlogPost blogPost = blogPostRepository.findOne(id);
         blogPost.add(linkTo(methodOn(BlogPostController.class).getBlogPostById(id)).withSelfRel());
         blogPost.add(linkTo(methodOn(BlogPostController.class).getBlogPostComments(id, null)).withRel("comments"));
+        blogPost.add(linkTo(methodOn(BlogPostController.class).getFiles(id)).withRel("files"));
         return new ResponseEntity<>(blogPost, HttpStatus.OK);
     }
 
@@ -93,12 +100,6 @@ public class BlogPostController {
             throw new AccessDeniedException();
         }
         return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/blog_post", method = RequestMethod.POST, consumes = "application/json")
-    public HttpEntity<BlogPost> createBlogPosts(@RequestBody BlogPost blogPost, @AuthenticationPrincipal final User user) {
-        blogPost.setOwner(user);
-        return new ResponseEntity<>(blogPostRepository.save(blogPost), HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/blog_post/{id}/file", method = RequestMethod.GET)

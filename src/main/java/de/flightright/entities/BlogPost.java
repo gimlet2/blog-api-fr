@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.hateoas.ResourceSupport;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import java.util.Date;
 
 @Entity
 public class BlogPost extends ResourceSupport {
@@ -24,6 +26,9 @@ public class BlogPost extends ResourceSupport {
     @JoinColumn(name = "owner")
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
     private User owner;
+
+    @Column(name = "creation_date")
+    private Date creationDate = new Date();
 
     protected BlogPost() {
     }
@@ -71,5 +76,9 @@ public class BlogPost extends ResourceSupport {
             return owner.getUsername();
         }
         return null;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
     }
 }
