@@ -44,7 +44,8 @@ public class Comment extends ResourceSupport {
         this.content = content;
     }
 
-    public Integer get_id() {
+    @JsonGetter("id")
+    public Integer getAid() {
         return _id;
     }
 

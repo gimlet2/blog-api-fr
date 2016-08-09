@@ -57,6 +57,7 @@ public class BlogPostController {
     public HttpEntity<BlogPost> getBlogPostById(@PathVariable("id") Integer id) {
         BlogPost blogPost = blogPostRepository.findOne(id);
         blogPost.add(linkTo(methodOn(BlogPostController.class).getBlogPostById(id)).withSelfRel());
+        blogPost.add(linkTo(methodOn(BlogPostController.class).getBlogPostComments(id, null)).withRel("comments"));
         return new ResponseEntity<>(blogPost, HttpStatus.OK);
     }
 

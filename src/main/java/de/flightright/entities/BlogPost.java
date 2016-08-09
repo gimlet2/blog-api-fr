@@ -56,4 +56,20 @@ public class BlogPost extends ResourceSupport {
     public void setOwner(User owner) {
         this.owner = owner;
     }
+
+    @JsonGetter("author_id")
+    public Integer getAuthorId() {
+        if (owner != null) {
+            return owner.getAid();
+        }
+        return null;
+    }
+
+    @JsonGetter("author_name")
+    public String getAuthorName() {
+        if (owner != null) {
+            return owner.getUsername();
+        }
+        return null;
+    }
 }
