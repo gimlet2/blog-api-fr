@@ -30,6 +30,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .mvcMatchers("/user").permitAll()
                 .mvcMatchers("/").permitAll()
+                .mvcMatchers("/blog_post/*/comment").permitAll()
+                .mvcMatchers("/blog_post/*").permitAll()
+                .mvcMatchers("/blog_post").permitAll()
+                .mvcMatchers("/blog_post/*/file").permitAll()
                 .anyRequest().fullyAuthenticated();
         http.httpBasic();
         http.csrf().disable();

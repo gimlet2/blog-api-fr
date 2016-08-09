@@ -92,7 +92,7 @@ public class BlogPostController {
     public HttpEntity<Void> deleteComment(@PathVariable("id") Integer id, @PathVariable("comment_id") Integer commentId, @AuthenticationPrincipal final User user) {
         BlogPost blogPost = getBlogPost(id);
         if (blogPost.getOwner().getAid().equals(user.getAid())) {
-            if (!commentRepository.exists(id)) {
+            if (!commentRepository.exists(commentId)) {
                 throw new CommentNotFoundException();
             }
             commentRepository.delete(commentId);
